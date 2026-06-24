@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mentor dos 1%</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="shortcut icon" href="logo.png" type="image/x-icon">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <span class="logo-icon">⬡</span>
+    <div>
+      <div class="logo-title" data-i18n="siteTitle">Mentor dos 1%</div>
+      <div class="logo-sub" data-i18n="siteSubtitle">Plataforma de Renda Online</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="#" class="nav-item active" data-section="dashboard" onclick="navigateTo('dashboard',this)">
+      <span class="nav-icon">◈</span><span data-i18n="navDashboard">Dashboard</span>
+    </a>
+    <a href="#" class="nav-item" data-section="learn" onclick="navigateTo('learn',this)">
+      <span class="nav-icon">◎</span><span data-i18n="navLearn">Aprendizado</span>
+    </a>
+    <a href="#" class="nav-item" data-section="planner" onclick="navigateTo('planner',this)">
+      <span class="nav-icon">◷</span><span data-i18n="navPlanner">Planejamento</span>
+    </a>
+    <a href="#" class="nav-item" data-section="earnings" onclick="navigateTo('earnings',this)">
+      <span class="nav-icon">◉</span><span data-i18n="navEarnings">Ganhos</span>
+    </a>
+    <a href="#" class="nav-item" data-section="mentor" onclick="navigateTo('mentor',this)">
+      <span class="nav-icon">◆</span><span data-i18n="navMentor">Mentor IA</span>
+    </a>
+    <a href="#" class="nav-item" data-section="goals" onclick="navigateTo('goals',this)">
+      <span class="nav-icon">◌</span><span data-i18n="navGoals">Metas</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <button class="btn-control" onclick="toggleTheme()" title="Tema">
+      <span id="themeIcon">☀</span>
+    </button>
+    <button class="btn-control lang-btn" onclick="toggleLang()" title="Idioma">
+      <span id="langLabel">EN</span>
+    </button>
+    <button class="btn-control" onclick="confirmReset()" title="Reset">
+      <span>⟳</span>
+    </button>
+  </div>
+</aside>
+
+<!-- HAMBURGER -->
+<button class="hamburger" onclick="toggleSidebar()">☰</button>
+
+<!-- MAIN -->
+<main class="main-content" id="main">
+
+  <!-- ===== DASHBOARD ===== -->
+  <section class="section active" id="section-dashboard">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title" data-i18n="dashTitle">Dashboard</h1>
+        <p class="page-desc" data-i18n="dashDesc">Acompanhe seu progresso rumo ao 1%</p>
+      </div>
+      <div class="mentor-badge" id="mentorBadge">💡 <span data-i18n="loading">Carregando...</span></div>
+    </div>
+
+    <!-- STATS CARDS -->
+    <div class="stats-grid">
+      <div class="stat-card gold">
+        <div class="stat-icon">$</div>
+        <div class="stat-info">
+          <div class="stat-value" id="statTotal">0,00</div>
+          <div class="stat-label" data-i18n="statTotal">Total Ganho</div>
+        </div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-icon">≈</div>
+        <div class="stat-info">
+          <div class="stat-value" id="statAvg">0,00</div>
+          <div class="stat-label" data-i18n="statAvg">Média Diária</div>
+        </div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon">★</div>
+        <div class="stat-info">
+          <div class="stat-value" id="statBest">0,00</div>
+          <div class="stat-label" data-i18n="statBest">Melhor Dia</div>
+        </div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-icon">◈</div>
+        <div class="stat-info">
+          <div class="stat-value" id="statDays">0</div>
+          <div class="stat-label" data-i18n="statDays">Dias Ativos</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHART -->
+    <div class="card chart-card">
+      <h2 class="card-title" data-i18n="chartTitle">Evolução de Ganhos</h2>
+      <div class="chart-wrap">
+        <canvas id="earningsChart"></canvas>
+      </div>
+    </div>
+
+    <!-- TODAY TASKS PREVIEW -->
+    <div class="card">
+      <h2 class="card-title" data-i18n="todayTasks">Tarefas de Hoje</h2>
+      <div id="dashTaskList" class="dash-task-list"></div>
+    </div>
+  </section>
+
+  <!-- ===== APRENDIZADO ===== -->
+  <section class="section" id="section-learn">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title" data-i18n="learnTitle">Área de Aprendizado</h1>
+        <p class="page-desc" data-i18n="learnDesc">Métodos reais para gerar renda online</p>
+      </div>
+    </div>
+
+    <div class="methods-grid" id="methodsGrid"></div>
+
+    <!-- Modal Método -->
+    <div class="modal-overlay" id="methodModal" onclick="closeModal()">
+      <div class="modal-box" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div id="modalContent"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PLANEJAMENTO ===== -->
+  <section class="section" id="section-planner">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title" data-i18n="plannerTitle">Planejamento Diário</h1>
+        <p class="page-desc" data-i18n="plannerDesc">Organize sua rotina e seja consistente</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="form-row">
+        <input type="time" id="taskTime" class="input-field"/>
+        <input type="text" id="taskDesc" class="input-field" placeholder="Descrição da tarefa..." data-i18n-ph="taskPh"/>
+        <button class="btn-primary" onclick="addTask()" data-i18n="addTask">Adicionar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title" data-i18n="myTasks">Minhas Tarefas</h2>
+      <div id="taskList" class="task-list"></div>
+    </div>
+  </section>
+
+  <!-- ===== GANHOS ===== -->
+  <section class="section" id="section-earnings">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title" data-i18n="earningsTitle">Registro de Ganhos</h1>
+        <p class="page-desc" data-i18n="earningsDesc">Registre cada centavo conquistado</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="form-row">
+        <input type="date" id="earningDate" class="input-field"/>
+        <input type="number" id="earningAmount" class="input-field" placeholder="Valor em USD..." min="0" step="0.01"/>
+        <input type="text" id="earningSource" class="input-field" placeholder="Fonte (ex: Freelancing)..." data-i18n-ph="sourcePh"/>
+        <button class="btn-primary" onclick="addEarning()" data-i18n="addEarning">Registrar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title" data-i18n="history">Histórico de Ganhos</h2>
+      <div id="earningsList" class="earnings-list"></div>
+    </div>
+  </section>
+
+  <!-- ===== MENTOR IA ===== -->
+  <section class="section" id="section-mentor">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title" data-i18n="mentorTitle">Mentor Inteligente</h1>
+        <p class="page-desc" data-i18n="mentorDesc">Orientação personalizada baseada no seu comportamento</p>
+      </div>
+    </div>
+
+    <div class="mentor-chat-box" id="mentorChat">
+      <div class="mentor-avatar">⬡</div>
+      <div class="mentor-messages" id="mentorMessages"></div>
+    </div>
+
+    <div class="card">
+      <div class="form-row">
+        <input type="text" id="mentorInput" class="input-field" placeholder="Pergunte ao seu mentor..." data-i18n-ph="mentorPh" onkeydown="if(event.key==='Enter') askMentor()"/>
+        <button class="btn-primary" onclick="askMentor()" data-i18n="ask">Perguntar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== METAS ===== -->
+  <section class="section" id="section-goals">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title" data-i18n="goalsTitle">Metas Semanais</h1>
+        <p class="page-desc" data-i18n="goalsDesc">Defina e acompanhe suas metas</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="form-row">
+        <input type="text" id="goalDesc" class="input-field" placeholder="Descreva sua meta..." data-i18n-ph="goalPh"/>
+        <input type="number" id="goalTarget" class="input-field" placeholder="Valor alvo ($)..." min="0"/>
+        <button class="btn-primary" onclick="addGoal()" data-i18n="addGoal">Adicionar Meta</button>
+      </div>
+    </div>
+
+    <div class="goals-grid" id="goalsList"></div>
+  </section>
+
+</main>
+
+<!-- NOTIFICATION -->
+<div class="notification" id="notification"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
